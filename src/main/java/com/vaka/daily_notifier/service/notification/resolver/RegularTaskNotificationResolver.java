@@ -9,9 +9,7 @@ import static com.vaka.daily_notifier.domain.util.DateTimeUtil.*;
 
 public class RegularTaskNotificationResolver implements NotificationResolver {
     @Override
-    public boolean shouldNotify(Task task) {
-        TaskNotification taskNotification = task.getTaskNotification();
-
+    public boolean shouldNotify(Task task, TaskNotification taskNotification) {
         if (taskNotification == null) {
             return true;
         }

@@ -12,35 +12,34 @@ import static com.vaka.daily_notifier.domain.util.TaskUtil.*;
 
 @Service
 public class FormatNotificationService {
-    public String formatTaskForNotification(Task task) {
-        String formattedTask = formatTask(task);
+    public String formatTaskForNotification(Task task, TaskType taskType) {
+        String formattedTask = formatTask(task, taskType);
         String msg;
 
-        if (isTaskSingular(task)) {
+        if ("singular".equalsIgnoreCase(taskType.getName())) {
             msg = String.format("Напоминание\n\nУ Вас есть нерешённая задача: %s", formattedTask);
-        } else if (isTaskRegular(task)) {
+        } else if ("regular".equalsIgnoreCase(taskType.getName())) {
             msg = String.format("Не забудьте!\n\n%s", formattedTask);
-        } else if (isTaskRepetitive(task)) {
+        } else if ("repetitive".equalsIgnoreCase(taskType.getName())) {
             if (isTaskDeadLineLater(task)) {
                 msg = String.format("Не забудьте!\n\n%s", formattedTask);
             } else {
                 msg = String.format("Вы забыли выполнить регулярное задание\n\n%s", formattedTask);
             }
         } else {
-            throw new IllegalArgumentException("Incorrect task type: " + task.getTaskType());
+            throw new IllegalArgumentException("Unknown task type: " + taskType);
         }
-
 
         return msg;
     }
 
-    private String formatTask(Task task) {
+    private String formatTask(Task task, TaskType taskType) {
         StringBuilder msg = new StringBuilder();
         msg.append(String.format("\nЗадание '%s' | %s | до %s | Тип: %s",
                 task.getName(),
                 task.getDescription(),
                 formatDeadLine(task.getDeadline()),
-                formatTaskType(task.getTaskType())));
+                formatTaskType(taskType)));
         msg.append("\n---\n");
         return msg.toString();
     }

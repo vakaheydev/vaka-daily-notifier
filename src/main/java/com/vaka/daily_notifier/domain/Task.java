@@ -29,23 +29,8 @@ public class Task {
     private Boolean status;
 
     @NotNull
-    private int scheduleId;
+    private Integer scheduleId;
 
     @NotNull
-    private TaskType taskType;
-
-    private TaskNotification taskNotification;
-
-    @Override
-    public String toString() {
-        return "Task{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", description='" + description + '\'' +
-                ", deadline=" + deadline +
-                ", status=" + status +
-                ", scheduleId=(" + scheduleId +
-                "), taskTypeId=(" + taskType +
-                ")}";
-    }
+    private Integer taskTypeId;
 }

@@ -5,8 +5,11 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.type.TypeFactory;
 import com.vaka.daily_notifier.domain.Task;
+import com.vaka.daily_notifier.domain.TaskNotification;
+import com.vaka.daily_notifier.domain.TaskType;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestClient;
 
 import java.util.List;
@@ -64,6 +67,25 @@ public class ApiClientService {
 
     }
 
+    public List<TaskType> getTaskTypes() {
+        String response = "";
+        try {
+            response = restClient.get()
+                    .uri("/task_type")
+                    .retrieve()
+                    .body(String.class);
+        } catch (Exception exception) {
+            log.error("Exception while getting task types: {}", exception.getClass().getSimpleName());
+        }
+
+        try {
+            return objectMapper.readValue(response,
+                    TypeFactory.defaultInstance().constructCollectionType(List.class, TaskType.class));
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
 
     public List<Task> getTasks() {
         String response = "";
@@ -79,6 +101,26 @@ public class ApiClientService {
         try {
             return objectMapper.readValue(response,
                     TypeFactory.defaultInstance().constructCollectionType(List.class, Task.class));
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public TaskNotification getTaskNotificationByTaskId(int taskId) {
+        String response = "";
+        try {
+            response = restClient.get()
+                    .uri("/task/" + taskId + "/notification")
+                    .retrieve()
+                    .body(String.class);
+        } catch (HttpClientErrorException.NotFound exception) {
+            return null;
+        } catch (Exception exception) {
+            log.error("Exception while getting task notification: {}", exception.getClass().getSimpleName());
+        }
+
+        try {
+            return objectMapper.readValue(response, TaskNotification.class);
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }
