@@ -64,6 +64,8 @@ public class NotificationService {
         return null;
     }
 
+    // Write a function that creates a telegram notification
+
     private Notification resolveTelegramNotification(Task task, TaskType taskType) {
         int scheduleId = task.getScheduleId();
         Optional<Long> optTgId = api.getTelegramIdByScheduleId(scheduleId);

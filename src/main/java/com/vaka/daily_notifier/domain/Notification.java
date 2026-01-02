@@ -12,13 +12,4 @@ public class Notification {
     private String chanel;
     private String chanelUserId;
     private LocalDateTime timestamp;
-
-    public String toJson() {
-        return "{" +
-                "\"message\": " + "\"" + message + "\"" +
-                ", \"chanel\": " + "\"" + chanel + "\""+
-                ", \"chanelUserId\":" + "\"" + chanelUserId + "\"" +
-                ", \"timestamp\": " + "\"" + timestamp + "\"" +
-                "}";
-    }
 }
